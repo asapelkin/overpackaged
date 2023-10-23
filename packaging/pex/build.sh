@@ -9,6 +9,7 @@ mkdir -p $BUILD_DIR
 
 pex ${SOURCE_DIR} \
 -c myapp \
+--compile \
 --output-file ${DIST_DIR}/myapp.pex \
 --interpreter-constraint "CPython>=3.8" \
 --pex-root ${BUILD_DIR}/.work-dir
