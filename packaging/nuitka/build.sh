@@ -9,12 +9,11 @@ mkdir -p $BUILD_DIR
 python -m nuitka \
 --standalone \
 $(which myapp) \
---onefile -o myapp.nuitka \
---output-dir=${BUILD_DIR}
-# --lto=yes \
-# --python-flag=-O \
-# --experimental=use_peephole \
-# --experimental=use-staticmethod-nodes
-
+-o myapp.nuitka \
+--output-dir=${BUILD_DIR} \
+--lto=yes \
+--python-flag=-O \
+--experimental=use_peephole \
+--experimental=use-staticmethod-nodes
 
 cp ${BUILD_DIR}/myapp.nuitka ${DIST_DIR}/myapp.nuitka

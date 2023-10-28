@@ -1,0 +1,19 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get install python3-pip gcc -y
+RUN pip3 install nuitka
+RUN apt-get install patchelf -y
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+RUN apt-get install curl libcurl4-gnutls-dev libpq-dev  libgnutls28-dev -y
+WORKDIR /tmp/myapp
+COPY *.py /tmp/myapp/
+COPY *.c /tmp/myapp/
+COPY *.txt /tmp/myapp/
+RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements-build.txt
+RUN pip3 install -e .
+RUN pex . -c myapp -o myapp.pex
+RUN python3 -m nuitka --standalone  myapp.py --onefile -o myapp
+# RUN ./myapp run
+# RUN gcc myextension.c -o myextension

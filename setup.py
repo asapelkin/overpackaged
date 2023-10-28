@@ -1,9 +1,9 @@
-from setuptools import setup, Extension
+from setuptools import setup, find_packages, Extension
 
 setup(
     name='myapp',
-    version='0.1',
-    py_modules=['myapp'],
+    version='4.2',
+    packages=find_packages(),
     install_requires=[
         'Click',
         'pycurl',
@@ -11,7 +11,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        myapp=myapp:cli
+        myapp=myapp.myapp:cli
     ''',
-    ext_modules=[Extension('myextension', ['myextension.c'])],
+    ext_modules=[Extension('myextension', ['myextension/myextension.c'])],
 )
