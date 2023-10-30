@@ -1,0 +1,30 @@
+services:
+  test_ubuntu:
+    image: ubuntu:20.04
+    volumes:
+      - /home/magn/projs/piterpy2023/myapp/dist:/myapp:ro
+    command: /myapp/myapp.nuitka
+
+  test_debian:
+    image: debian:10
+    volumes:
+      - /home/magn/projs/piterpy2023/myapp/dist:/myapp:ro
+    command: /myapp/myapp.nuitka
+
+  # test_archlinux:
+  #   image: archlinux:latest
+  #   volumes:
+  #     - ./path/to/executable:/myapp
+  #   command: /myapp/my_executable
+  #   depends_on:
+  #     - setup
+
+  # setup:
+  #   image: alpine:latest
+  #   volumes:
+  #     - ./path/to/executable:/myapp
+  #   command: |
+  #     sh -c "
+  #       echo 'Preparing environment...';
+  #       # Здесь можно добавить команды для установки зависимостей или подготовки среды
+  #     "

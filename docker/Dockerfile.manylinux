@@ -1,3 +1,10 @@
-FROM quay.io/pypa/manylinux2014_x86_64:latest
+FROM quay.io/pypa/manylinux2014_x86_64:2023-10-30-2d1b8c5
 
-RUN yum install curl-devel postgresql-devel fuse-devel -y
+RUN yum install -y curl-devel postgresql-devel  wget
+RUN rm -rf /opt/_internal/cpython-3.8.18 /opt/python/cp38-cp38
+RUN sed -i 's|--disable-shared|--enable-shared|g' /opt/_internal/build_scripts/build-cpython.sh
+# RUN sed -i 's|PREFIX="/opt/_internal|PREFIX="/opt/pywithdev|g' ./opt/_internal/build_scripts/build-cpython.sh
+RUN sed -i 's|gpg|# gpg|g' ./opt/_internal/build_scripts/build-cpython.sh
+
+RUN /opt/_internal/build_scripts/build-cpython.sh "3.8.18"
+RUN /opt/python/cp38-cp38/bin/pip install --upgrade nuitka pyoxidizer  # TODO ugly

@@ -1,0 +1,4 @@
+FROM python:3.8
+
+RUN pip3 install nuitka pyoxidizer
+RUN apt-get update && apt-get install patchelf -y
