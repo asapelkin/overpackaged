@@ -1,10 +1,28 @@
-FROM quay.io/pypa/manylinux2014_x86_64:2023-10-30-2d1b8c5
+FROM quay.io/pypa/manylinux_2_24_x86_64:2022-12-26-0d38463
 
-RUN yum install -y curl-devel postgresql-devel  wget
-RUN rm -rf /opt/_internal/cpython-3.8.18 /opt/python/cp38-cp38
-RUN sed -i 's|--disable-shared|--enable-shared|g' /opt/_internal/build_scripts/build-cpython.sh
-# RUN sed -i 's|PREFIX="/opt/_internal|PREFIX="/opt/pywithdev|g' ./opt/_internal/build_scripts/build-cpython.sh
-RUN sed -i 's|gpg|# gpg|g' ./opt/_internal/build_scripts/build-cpython.sh
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
+    apt-get update &&\
+    apt-get install -y\
+                wget \
+                zstd \
+                lsb-release \
+                wget \
+                software-properties-common \
+                gnupg \
+                apt-transport-https \
+                libcurl4-nss-dev \
+                postgresql-server-dev-all \
+                ccache
 
-RUN /opt/_internal/build_scripts/build-cpython.sh "3.8.18"
-RUN /opt/python/cp38-cp38/bin/pip install --upgrade nuitka pyoxidizer  # TODO ugly
+RUN wget https://apt.llvm.org/llvm.sh &&\
+    chmod +x llvm.sh &&\
+    ./llvm.sh 14
+
+RUN wget https://github.com/indygreg/python-build-standalone/releases/download/20221220/cpython-3.8.16+20221220-x86_64-unknown-linux-gnu-debug-full.tar.zst -O /tmp/cpython-3.8.16+20221220-x86_64-unknown-linux-gnu-debug-full.tar.zst && \
+    mkdir /opt/python-build-standalone && \
+    tar -I zstd -xvf /tmp/cpython-3.8.16+20221220-x86_64-unknown-linux-gnu-debug-full.tar.zst -C /opt/python-build-standalone
+
+RUN /opt/python-build-standalone/python/install/bin/pip install --upgrade zstandard nuitka pyoxidizer pex python-appimage # TODO ugly + version
+
+RUN useradd -u 1000 -U -m -s /bin/bash builder
+USER builder

@@ -1,30 +1,46 @@
+version: '3.8'
+
 services:
-  test_ubuntu:
-    image: ubuntu:20.04
+  pyoxidizer:
+    image: myapp-manylinux-build-env
     volumes:
-      - /home/magn/projs/piterpy2023/myapp/dist:/myapp:ro
-    command: /myapp/myapp.nuitka
+      - ${SOURCE_DIR}:${SOURCE_DIR}:rw
+      - ${WHEEL_DIR}:${WHEEL_DIR}:rw
+    environment:
+      - WHEEL_DIR=${WHEEL_DIR}
+      - DIST_DIR=${DIST_DIR}
+      - SOURCE_DIR=${SOURCE_DIR}
+    command: /bin/bash -c "${SOURCE_DIR}/packaging/pyoxidizer/build.sh"
 
-  test_debian:
-    image: debian:10
+  nuitka:
+    image: myapp-manylinux-build-env
     volumes:
-      - /home/magn/projs/piterpy2023/myapp/dist:/myapp:ro
-    command: /myapp/myapp.nuitka
+      - ${SOURCE_DIR}:${SOURCE_DIR}:rw
+      - ${WHEEL_DIR}:${WHEEL_DIR}:rw
+    environment:
+      - WHEEL_DIR=${WHEEL_DIR}
+      - BUILD_DIR=${BUILD_DIR}
+      - DIST_DIR=${DIST_DIR}
+    command: /bin/bash -c "${SOURCE_DIR}/packaging/nuitka/build.sh"
 
-  # test_archlinux:
-  #   image: archlinux:latest
-  #   volumes:
-  #     - ./path/to/executable:/myapp
-  #   command: /myapp/my_executable
-  #   depends_on:
-  #     - setup
+  appimage:
+    image: myapp-manylinux-build-env
+    volumes:
+      - ${SOURCE_DIR}:${SOURCE_DIR}:rw
+      - ${WHEEL_DIR}:${WHEEL_DIR}:rw
+    environment:
+      - WHEEL_DIR=${WHEEL_DIR}
+      - BUILD_DIR=${BUILD_DIR}
+      - DIST_DIR=${DIST_DIR}
+    command: /bin/bash -c "${SOURCE_DIR}/packaging/appimage/build.sh"
 
-  # setup:
-  #   image: alpine:latest
-  #   volumes:
-  #     - ./path/to/executable:/myapp
-  #   command: |
-  #     sh -c "
-  #       echo 'Preparing environment...';
-  #       # Здесь можно добавить команды для установки зависимостей или подготовки среды
-  #     "
+  pex:
+    image: myapp-manylinux-build-env
+    volumes:
+      - ${SOURCE_DIR}:${SOURCE_DIR}:rw
+      - ${WHEEL_DIR}:${WHEEL_DIR}:rw
+    environment:
+      - WHEEL_DIR=${WHEEL_DIR}
+      - BUILD_DIR=${BUILD_DIR}
+      - DIST_DIR=${DIST_DIR}
+    command: /bin/bash -c "${SOURCE_DIR}/packaging/pex/build.sh"
