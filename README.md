@@ -2,6 +2,7 @@
 
 ## Overview
 This project serves as a demonstration of various methods of packaging a standalone Python application in a truly (i hope) portable way.
+![Alt text](image.png)
 
 ## About the Experimental Application
 
