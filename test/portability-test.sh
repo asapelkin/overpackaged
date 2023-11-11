@@ -14,7 +14,7 @@ declare -a images=(
 
 declare -a executables=(
   "myapp_nuitka_onefile"
-  "myapp_nuitka_as_folder/myapp.nuitka"
+  "myapp_nuitka_as_folder/myapp"
   "pyoxidizer/myapp"
 )
 

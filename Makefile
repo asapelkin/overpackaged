@@ -11,7 +11,8 @@ DOCKER_BUILD_INDICATOR := $(BUILD_DIR)/.docker-build
 WHEELHOUSE_INDICATOR := $(WHEEL_DIR)/.wheelhouse
 VERIFY_WHEELS_INDICATOR := $(BUILD_DIR)/.verify-wheels
 ALLOWED_WHL_TAGS := any manylinux_2_24_x86_64
-BENCHMARK_ENABLED := $(DIST_DIR)/myapp_nuitka_onefile $(DIST_DIR)/myapp_nuitka_as_folder/myapp $(DIST_DIR)/pyoxidizer/myapp
+BENCHMARK_ENABLED_STARTUP := "$(DIST_DIR)/myapp_nuitka_onefile --help" "$(DIST_DIR)/myapp_nuitka_as_folder/myapp --help" "$(DIST_DIR)/pyoxidizer/myapp --help"
+BENCHMARK_ENABLED_FULL_RUN := "$(DIST_DIR)/myapp_nuitka_onefile run" "$(DIST_DIR)/myapp_nuitka_as_folder/myapp run" "$(DIST_DIR)/pyoxidizer/myapp run"
 
 export DIST_DIR
 export SOURCE_DIR
@@ -49,10 +50,13 @@ appimage: $(VERIFY_WHEELS_INDICATOR)
 
 pyoxidizer: $(VERIFY_WHEELS_INDICATOR)
 	BUILD_DIR=$(BUILD_DIR)/$@ \
-	$(SOURCE_DIR)/packaging/pyoxidizer/docker-run.sh
+	$(SOURCE_DIR)/docker/docker-run.sh $(SOURCE_DIR)/packaging/pyoxidizer/build.sh
 
 benchmark:
-	hyperfine --warmup 5  $(BENCHMARK_ENABLED)
+	echo "Benchmarking startup time..."
+	hyperfine --warmup 5  $(BENCHMARK_ENABLED_STARTUP)
+	echo "Benchmarking full working time..."
+	hyperfine --warmup 5  $(BENCHMARK_ENABLED_FULL_RUN)
 
 portability-test:
 	test/portability-test.sh

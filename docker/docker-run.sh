@@ -11,6 +11,7 @@ set -ex
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DIST_DIR}
 mkdir -p ${CACHE_DIR}
+mkdir -p ${CACHE_DIR}/cargo
 
 sudo -E \
 docker run -u $(id -u):$(id -g) \
@@ -19,6 +20,7 @@ docker run -u $(id -u):$(id -g) \
 -e BUILD_DIR=${BUILD_DIR} \
 -e DIST_DIR=${DIST_DIR} \
 -v ${CACHE_DIR}:/home/builder/.cache/ \
+-v ${CACHE_DIR}/cargo:/home/builder/.cargo/ \
 -v ${SOURCE_DIR}:${SOURCE_DIR} \
 -w ${SOURCE_DIR} \
 myapp-manylinux-build-env \
