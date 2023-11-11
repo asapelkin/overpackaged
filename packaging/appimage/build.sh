@@ -5,16 +5,16 @@ set -ex
 : ${SOURCE_DIR:?"SOURCE_DIR is not set or is empty"}
 : ${WHEEL_DIR:?"WHEEL_DIR is not set or is empty"}
 : ${BUILD_DIR:?"BUILD_DIR is not set or is empty"}
+: ${PYTHON_HOME:?"PYTHON is not set or is empty"}
+: ${PYTHON:?"PYTHON is not set or is empty"}
+: ${PIP:?"PIP is not set or is empty"}
 
 mkdir -p $DIST_DIR
 mkdir -p $BUILD_DIR
 cd ${BUILD_DIR}
 
-PYTHON_HOME="/opt/python-build-standalone/python/install/"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$(PYTHON_HOME)/lib/"
 export PATH=${PYTHON_HOME}/bin:${PATH}:${HOME}/.local/bin
-PYTHON="${PYTHON_HOME}/bin/python3"
-PIP="${PYTHON_HOME}/bin/pip"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${PYTHON_HOME}/lib/"
 
 ${PYTHON} -m venv .venv
 . .venv/bin/activate
