@@ -37,7 +37,7 @@ ${NUITKA_FLAGS} \
 
 ${PYTHON} -m nuitka \
 $(which myapp) \
--o myappb \
+-o myapp \
 ${NUITKA_FLAGS}
 
 cp ${BUILD_DIR}/myapp_nuitka_onefile ${DIST_DIR}/myapp_nuitka_onefile
