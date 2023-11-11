@@ -6,6 +6,13 @@ WHEEL_DIR := $(CURDIR)/wheelhouse
 BUILD_DIR := $(CURDIR)/.build
 CACHE_DIR := $(CURDIR)/.cache
 DOCKER_IMAGE := myapp-manylinux-build-env
+MANYLINUX_PYTHON=/opt/python/cp38-cp38/bin/python
+MANYLINUX_PIP=/opt/python/cp38-cp38/bin/pip
+PYTHON_INSTALL_PREFIX=/opt/python-build-standalone
+PYTHON_HOME=$(PYTHON_INSTALL_PREFIX)/python/install/
+PYTHON=$(PYTHON_HOME)/bin/python3
+PIP=$(PYTHON_HOME)/bin/pip
+
 
 DOCKER_BUILD_INDICATOR := $(BUILD_DIR)/.docker-build
 WHEELHOUSE_INDICATOR := $(WHEEL_DIR)/.wheelhouse
@@ -18,6 +25,12 @@ export DIST_DIR
 export SOURCE_DIR
 export WHEEL_DIR
 export CACHE_DIR
+export MANYLINUX_PYTHON
+export MANYLINUX_PIP
+export PYTHON_INSTALL_PREFIX
+export PYTHON_HOME
+export PYTHON
+export PIP
 
 
 $(DOCKER_BUILD_INDICATOR):
@@ -73,4 +86,4 @@ portability-test:
 
 clean:
 	rm -f $(DOCKER_BUILD_INDICATOR) $(WHEELHOUSE_INDICATOR) $(VERIFY_WHEELS_INDICATOR)
-	rm -rf $(BUILD_DIR)/* $(DIST_DIR)/*
+	rm -rf $(BUILD_DIR)/* $(DIST_DIR)/* $(WHEEL_DIR)/*

@@ -1,7 +1,8 @@
 #!/bin/env bash
 set -ex
 
+: ${PYTHON_INSTALL_PREFIX:?"PYTHON_INSTALL_PREFIX is not set or is empty"}
+
 scriptdir="$( dirname -- "$BASH_SOURCE"; )";
 
-sudo -E docker pull quay.io/pypa/manylinux2014_x86_64:2023-10-30-2d1b8c5
-sudo -E docker build -t myapp-manylinux-build-env --network=host -f ${scriptdir}/Dockerfile.manylinux .
+sudo -E docker build -t myapp-manylinux-build-env -f ${scriptdir}/Dockerfile.manylinux . --build-arg="PYTHON_INSTALL_PREFIX=${PYTHON_INSTALL_PREFIX}"

@@ -19,6 +19,12 @@ docker run -u $(id -u):$(id -g) \
 -e SOURCE_DIR=${SOURCE_DIR} \
 -e BUILD_DIR=${BUILD_DIR} \
 -e DIST_DIR=${DIST_DIR} \
+-e MANYLINUX_PYTHON=${MANYLINUX_PYTHON} \
+-e MANYLINUX_PIP=${MANYLINUX_PIP} \
+-e PYTHON_INSTALL_PREFIXT_DIR=${PYTHON_INSTALL_PREFIX} \
+-e PYTHON_HOME=${PYTHON_HOME} \
+-e PYTHON=${PYTHON} \
+-e PIP=${PIP} \
 -v ${CACHE_DIR}:/home/builder/.cache/ \
 -v ${CACHE_DIR}/cargo:/home/builder/.cargo/ \
 -v ${SOURCE_DIR}:${SOURCE_DIR} \
