@@ -1,0 +1,43 @@
+FROM quay.io/pypa/manylinux_2_24_x86_64:2022-12-26-0d38463
+
+ARG STANDALONE_PYTHON_RELEASE="20221220"
+ARG STANDALONE_PYTHON_VERSION="cpython-3.8.16+${STANDALONE_PYTHON_RELEASE}"
+ARG PYTHON_ARCHIVE_NAME="${STANDALONE_PYTHON_VERSION}-x86_64-unknown-linux-gnu-debug-full.tar.zst"
+ARG STANDALONE_PYTHON_URL="https://github.com/indygreg/python-build-standalone/releases/download"
+ARG PYTHON_INSTALL_PREFIX="/opt/python-build-standalone"
+
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
+    apt-get update &&\
+    apt-get install -y\
+                    wget \
+                    zstd \
+                    lsb-release \
+                    wget \
+                    software-properties-common \
+                    gnupg \
+                    apt-transport-https \
+                    libcurl4-nss-dev \
+                    postgresql-server-dev-all \
+                    ccache
+
+# Needed only for static linking with libpython
+# ARG LLVM_VERSION=14
+# RUN wget https://apt.llvm.org/llvm.sh &&\
+#     chmod +x llvm.sh &&\
+#     ./llvm.sh ${LLVM_VERSION}
+
+RUN wget ${STANDALONE_PYTHON_URL}/${STANDALONE_PYTHON_RELEASE}/${PYTHON_ARCHIVE_NAME} \
+    -O /tmp/${PYTHON_ARCHIVE_NAME} && \
+    mkdir ${PYTHON_INSTALL_PREFIX} && \
+    tar -I zstd -xvf /tmp/${PYTHON_ARCHIVE_NAME} -C ${PYTHON_INSTALL_PREFIX}
+
+RUN ${PYTHON_INSTALL_PREFIX}/python/install/bin/pip install --upgrade \
+    Nuitka==1.8.5 \
+    ordered-set==4.1.0 \
+    pex==2.1.152 \
+    pyoxidizer==0.24.0 \
+    python-appimage==1.2.5 \
+    zstandard==0.22.0
+
+RUN useradd -u 1000 -U -m -s /bin/bash builder
+USER builder

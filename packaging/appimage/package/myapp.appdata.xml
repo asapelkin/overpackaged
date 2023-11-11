@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>myapp</id>
+    <metadata_license>MIT</metadata_license>
+    <project_license>Python-2.0</project_license>
+    <name>MYAPP</name>
+    <summary>MYAPP on Python {{ python-fullversion }}</summary>
+    <description>
+        <p>  Python {{ python-fullversion }} + MYAPP bundled in an AppImage.
+        </p>
+    </description>
+    <launchable type="desktop-id">myapp.desktop</launchable>
+    <url type="homepage">https://github.com/asapelkin/overpackaged</url>
+    <provides>
+        <binary>python{{ python-version }}</binary>
+    </provides>
+</component>
