@@ -23,8 +23,6 @@ error_count=0
 
 for image in "${images[@]}"; do
   for executable in "${executables[@]}"; do
-    echo "Testing ${executable} on ${image}..."
-
     if sudo -E docker run --rm -v "${DIST_DIR}:/myapp:ro" "${image}" /myapp/${executable} > /dev/null 2>&1; then
       echo "Success: ${executable} passed on ${image}"
       ((success_count++))
