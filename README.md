@@ -44,15 +44,15 @@ To build and test this project, you will need:
 To build the whole project, run the following command:
 
 ```bash
-make build
+make pyoxidizer nuitka pex appimage
 ```
 
 **Or** to build only one of the executables:
 ```bash
+make pyoxidizer
 make nuitka
 make pex
 make appimage
-make pyoxidizer
 ```
 
 
